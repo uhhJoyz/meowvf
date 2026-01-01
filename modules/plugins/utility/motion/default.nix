@@ -4,5 +4,6 @@ _: {
     ./hop
     ./leap
     ./precognition
+    ./clever-f
   ];
 }
