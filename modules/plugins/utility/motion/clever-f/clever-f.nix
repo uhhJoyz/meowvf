@@ -1,10 +1,12 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.types) nullOr str;
   inherit (lib.nvim.types) mkPluginSetupOption;
-in {
+in
+{
   options.vim.utility.motion.clever-f = {
     enable = mkEnableOption "better navigation with f/F/t/T";
-    setupOpts = mkPluginSetupOption "clever-f" {};
+    setupOpts = mkPluginSetupOption "clever-f" { };
   };
 }

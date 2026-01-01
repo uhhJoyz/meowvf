@@ -17,7 +17,7 @@ in
           package = pkgs.vimPlugins.clever-f-vim;
           lazy = true;
           event = [ "BufEnter" ];
-          after = ''
+          before = ''
             vim.g.clever_f_show_prompt = 1
             vim.g.clever_f_fix_key_direction = 1
             vim.g.clever_f_smart_case = 1
