@@ -3,7 +3,7 @@
   inherit (lib.types) nullOr str;
   inherit (lib.nvim.types) mkPluginSetupOption;
 in {
-  options.vim.utility.motion.flash-nvim = {
+  options.vim.utility.motion.clever-f = {
     enable = mkEnableOption "better navigation with f/F/t/T";
     setupOpts = mkPluginSetupOption "clever-f" {};
   };
