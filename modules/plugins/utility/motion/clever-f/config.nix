@@ -14,7 +14,7 @@ in
     vim = {
       lazy.plugins = {
         "clever-f.vim" = {
-          package = "clever-f";
+          package = "clever-f.vim";
           lazy = true;
           event = [ "BufEnter" ];
           before = ''
