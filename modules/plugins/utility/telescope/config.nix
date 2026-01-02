@@ -43,6 +43,7 @@ in {
         keys =
           [
             (mkKeymap "n" keys.findFiles "<cmd>Telescope find_files<CR>" {desc = mappings.findFiles.description;})
+            (mkKeymap "n" keys.findKeys "<cmd>Telescope keymaps<CR>" {desc = mappings.findKeys.description;})
             (mkKeymap "n" keys.liveGrep "<cmd>Telescope live_grep<CR>" {desc = mappings.liveGrep.description;})
             (mkKeymap "n" keys.buffers "<cmd>Telescope buffers<CR>" {desc = mappings.buffers.description;})
             (mkKeymap "n" keys.helpTags "<cmd>Telescope help_tags<CR>" {desc = mappings.helpTags.description;})

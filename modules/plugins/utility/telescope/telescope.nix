@@ -202,6 +202,7 @@ in {
     mappings = {
       findProjects = mkMappingOption "Find projects [Telescope]" "<leader>fp";
       findFiles = mkMappingOption "Find files [Telescope]" "<leader>ff";
+      findKeys = mkMappingOption "Find keymaps [Telescope]" "<leader>hk";
       liveGrep = mkMappingOption "Live grep [Telescope]" "<leader>fg";
       buffers = mkMappingOption "Buffers [Telescope]" "<leader>fb";
       helpTags = mkMappingOption "Help tags [Telescope]" "<leader>fh";
