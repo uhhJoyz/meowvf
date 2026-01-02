@@ -18,11 +18,19 @@ in
           lazy = true;
           event = [ "BufEnter" ];
           keys = [
+            # FIXME: currently does nothing,
+            # figure out how to make it assign in the proper order
+            {
+              mode = "n";
+              key = "<esc>";
+              action = "<cmd>noh<cr><Plug>(clever-f-reset)";
+            }
             {
               mode = "n";
               key = ",";
               action = "<Plug>(clever-f-repeat-back)";
-            }{
+            }
+            {
               mode = "n";
               key = ";";
               action = "<Plug>(clever-f-repeat-forward)";

@@ -129,7 +129,7 @@
 
             preview_cutoff = mkOption {
               type = int;
-              default = 120;
+              default = 0;
               description = "When lines are less than this value, the preview will be disabled";
             };
           };

@@ -1,5 +1,6 @@
 {
   imports = [
     ./neocord
+    ./cord-nvim
   ];
 }
