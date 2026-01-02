@@ -13,8 +13,8 @@ in
   config = mkIf cfg.enable {
     vim = {
       lazy.plugins = {
-        "clever-f.vim" = {
-          package = "clever-f.vim";
+        "clever-f" = {
+          package = "clever-f";
           lazy = true;
           event = [ "BufEnter" ];
           before = ''

@@ -211,7 +211,7 @@
       "url": "https://github.com/declancm/cinnamon.nvim/archive/450cb3247765fed7871b41ef4ce5fa492d834215.tar.gz",
       "hash": "1vq0cab139gyix2qhmivp86fq6l4fhzn7qafphj0yjac47i11iwi"
     },
-    "clever-f.vim": {
+    "clever-f": {
       "type": "Git",
       "repository": {
         "type": "GitHub",
