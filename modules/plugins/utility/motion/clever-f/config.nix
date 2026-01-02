@@ -7,21 +7,25 @@
 let
   inherit (lib.modules) mkIf;
 
-  cfg = config.vim.utility.motion.clever-f;
+  cfg = config.vim.utility.motion.clever-f-vim;
 in
 {
   config = mkIf cfg.enable {
     vim = {
       lazy.plugins = {
-        "clever-f.vim" = {
-          package = "clever-f.vim";
+        "clever-f-vim" = {
+          package = "clever-f-vim";
           lazy = true;
           event = [ "BufEnter" ];
           keys = [
             {
               mode = "n";
+              key = ",";
+              action = "<Plug>(clever-f-repeat-back)";
+            }{
+              mode = "n";
               key = ";";
-              action = "<Plug>";
+              action = "<Plug>(clever-f-repeat-forward)";
             }
           ];
           before = ''

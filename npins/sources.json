@@ -211,7 +211,7 @@
       "url": "https://github.com/declancm/cinnamon.nvim/archive/450cb3247765fed7871b41ef4ce5fa492d834215.tar.gz",
       "hash": "1vq0cab139gyix2qhmivp86fq6l4fhzn7qafphj0yjac47i11iwi"
     },
-    "clever-f.vim": {
+    "clever-f-vim": {
       "type": "Git",
       "repository": {
         "type": "GitHub",
@@ -221,8 +221,8 @@
       "branch": "main",
       "submodules": false,
       "revision": "6a3ac5e3688598af9411ab741737f98c47370c22",
-      "url": "https://github.com/rhysd/clever-f.vim/archive/miltIeW0AZPgqoDno0Nyo287mBbV2cJaf1XahECZfr0.tar.gz",
-      "hash": "miltIeW0AZPgqoDno0Nyo287mBbV2cJaf1XahECZfr0"
+      "url": "https://github.com/rhysd/clever-f.vim/archive/6a3ac5e3688598af9411ab741737f98c47370c22.tar.gz",
+      "hash": "sha256-miltIeW0AZPgqoDno0Nyo287mBbV2cJaf1XahECZfr0="
     },
     "cmp-buffer": {
       "type": "Git",

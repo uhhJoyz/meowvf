@@ -5,7 +5,7 @@ let
   inherit (lib.nvim.types) mkPluginSetupOption;
 in
 {
-  options.vim.utility.motion.clever-f = {
+  options.vim.utility.motion.clever-f-vim = {
     enable = mkEnableOption "better navigation with f/F/t/T";
     setupOpts = mkPluginSetupOption "clever-f" { };
   };
