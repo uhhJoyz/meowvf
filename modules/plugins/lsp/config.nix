@@ -116,7 +116,7 @@ in {
           ${mkBinding mappings.signatureHelp "vim.lsp.buf.signature_help"}
           ${mkBinding mappings.renameSymbol "vim.lsp.buf.rename"}
           ${mkBinding mappings.codeAction "vim.lsp.buf.code_action"}
-          ${mkBinding mappings.format "vim.lsp.buf.format"}
+          ${mkBinding mappings.format "function() require('conform').format({ lsp_format = 'fallback', timeout_ms = 500 }) end"}
           ${mkBinding mappings.toggleFormatOnSave "function() vim.b.disableFormatSave = not vim.b.disableFormatSave end"}
         end
 

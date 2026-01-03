@@ -26,12 +26,18 @@ in
               action = "<cmd>noh<cr><Plug>(clever-f-reset)";
             }
             {
-              mode = "n";
+              mode = [
+                "n"
+                "v"
+              ];
               key = ",";
               action = "<Plug>(clever-f-repeat-back)";
             }
             {
-              mode = "n";
+              mode = [
+                "n"
+                "v"
+              ];
               key = ";";
               action = "<Plug>(clever-f-repeat-forward)";
             }

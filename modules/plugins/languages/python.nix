@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   inherit (builtins) attrNames;
   inherit (lib.options) mkEnableOption mkOption literalExpression;
   inherit (lib.lists) flatten;
@@ -18,12 +19,15 @@
 
   cfg = config.vim.languages.python;
 
-  defaultServers = ["basedpyright"];
+  defaultServers = [ "basedpyright" ];
   servers = {
     pyright = {
       enable = true;
-      cmd = [(getExe' pkgs.pyright "pyright-langserver") "--stdio"];
-      filetypes = ["python"];
+      cmd = [
+        (getExe' pkgs.pyright "pyright-langserver")
+        "--stdio"
+      ];
+      filetypes = [ "python" ];
       root_markers = [
         "pyproject.toml"
         "setup.py"
@@ -68,8 +72,11 @@
 
     basedpyright = {
       enable = true;
-      cmd = [(getExe' pkgs.basedpyright "basedpyright-langserver") "--stdio"];
-      filetypes = ["python"];
+      cmd = [
+        (getExe' pkgs.basedpyright "basedpyright-langserver")
+        "--stdio"
+      ];
+      filetypes = [ "python" ];
       root_markers = [
         "pyproject.toml"
         "setup.py"
@@ -115,8 +122,8 @@
 
     python-lsp-server = {
       enable = true;
-      cmd = [(getExe pkgs.python3Packages.python-lsp-server)];
-      filetypes = ["python"];
+      cmd = [ (getExe pkgs.python3Packages.python-lsp-server) ];
+      filetypes = [ "python" ];
       root_markers = [
         "pyproject.toml"
         "setup.py"
@@ -128,7 +135,7 @@
     };
   };
 
-  defaultFormat = ["black"];
+  defaultFormat = [ "black" ];
   formats = {
     black = {
       command = getExe pkgs.black;
@@ -139,17 +146,20 @@
     };
 
     # dummy option for backwards compat
-    black-and-isort = {};
+    black-and-isort = { };
 
     ruff = {
       command = getExe pkgs.ruff;
-      args = ["format" "-"];
+      args = [
+        "format"
+        "-"
+      ];
     };
 
     ruff-check = {
       package = pkgs.writeShellApplication {
         name = "ruff-check";
-        runtimeInputs = [pkgs.ruff];
+        runtimeInputs = [ pkgs.ruff ];
         text = ''
           ruff check --fix --exit-zero -
         '';
@@ -161,7 +171,7 @@
   debuggers = {
     debugpy = {
       # idk if this is the best way to install/run debugpy
-      package = pkgs.python3.withPackages (ps: with ps; [debugpy]);
+      package = pkgs.python3.withPackages (ps: with ps; [ debugpy ]);
       dapConfig = ''
         dap.adapters.debugpy = function(cb, config)
           if config.request == 'attach' then
@@ -219,12 +229,15 @@
       '';
     };
   };
-in {
+in
+{
   options.vim.languages.python = {
     enable = mkEnableOption "Python language support";
 
     treesitter = {
-      enable = mkEnableOption "Python treesitter" // {default = config.vim.languages.enableTreesitter;};
+      enable = mkEnableOption "Python treesitter" // {
+        default = config.vim.languages.enableTreesitter;
+      };
       package = mkOption {
         description = "Python treesitter grammar to use";
         type = package;
@@ -233,7 +246,9 @@ in {
     };
 
     lsp = {
-      enable = mkEnableOption "Python LSP support" // {default = config.vim.lsp.enable;};
+      enable = mkEnableOption "Python LSP support" // {
+        default = config.vim.lsp.enable;
+      };
 
       servers = mkOption {
         type = deprecatedSingleOrListOf "vim.language.python.lsp.servers" (enum (attrNames servers));
@@ -243,7 +258,9 @@ in {
     };
 
     format = {
-      enable = mkEnableOption "Python formatting" // {default = config.vim.languages.enableFormat;};
+      enable = mkEnableOption "Python formatting" // {
+        default = config.vim.languages.enableFormat;
+      };
 
       type = mkOption {
         type = deprecatedSingleOrListOf "vim.language.python.format.type" (enum (attrNames formats));
@@ -281,64 +298,66 @@ in {
   config = mkIf cfg.enable (mkMerge [
     (mkIf cfg.treesitter.enable {
       vim.treesitter.enable = true;
-      vim.treesitter.grammars = [cfg.treesitter.package];
+      vim.treesitter.grammars = [ cfg.treesitter.package ];
     })
 
     (mkIf cfg.lsp.enable {
-      vim.luaConfigRC.python-util =
-        entryBefore ["lsp-servers"]
-        /*
-        lua
-        */
-        ''
-          local function set_python_path(server_name, command)
-            local path = command.args
-            local clients = vim.lsp.get_clients {
-              bufnr = vim.api.nvim_get_current_buf(),
-              name = server_name,
-            }
-            for _, client in ipairs(clients) do
-              if client.settings then
-                client.settings.python = vim.tbl_deep_extend('force', client.settings.python or {}, { pythonPath = path })
-              else
-                client.config.settings = vim.tbl_deep_extend('force', client.config.settings, { python = { pythonPath = path } })
-              end
-              client:notify('workspace/didChangeConfiguration', { settings = nil })
+      vim.luaConfigRC.python-util = entryBefore [ "lsp-servers" ] /* lua */ ''
+        local function set_python_path(server_name, command)
+          local path = command.args
+          local clients = vim.lsp.get_clients {
+            bufnr = vim.api.nvim_get_current_buf(),
+            name = server_name,
+          }
+          for _, client in ipairs(clients) do
+            if client.settings then
+              client.settings.python = vim.tbl_deep_extend('force', client.settings.python or {}, { pythonPath = path })
+            else
+              client.config.settings = vim.tbl_deep_extend('force', client.config.settings, { python = { pythonPath = path } })
             end
+            client:notify('workspace/didChangeConfiguration', { settings = nil })
           end
-        '';
+        end
+      '';
 
-      vim.lsp.servers =
-        mapListToAttrs (n: {
-          name = n;
-          value = servers.${n};
-        })
-        cfg.lsp.servers;
+      vim.lsp.servers = mapListToAttrs (n: {
+        name = n;
+        value = servers.${n};
+      }) cfg.lsp.servers;
     })
 
     (mkIf cfg.format.enable {
-      vim.formatter.conform-nvim = let
-        names = flatten (map (type:
-          if type == "black-and-isort"
-          then
-            warn ''
-              vim.languages.python.format.type: "black-and-isort" is deprecated,
-              use `["black" "isort"]` instead.
-            '' ["black" "isort"]
-          else type)
-        cfg.format.type);
-      in {
-        enable = true;
-        setupOpts = {
-          formatters_by_ft.python = names;
-          formatters =
-            mapListToAttrs (name: {
+      vim.formatter.conform-nvim =
+        let
+          names = flatten (
+            map (
+              type:
+              if type == "black-and-isort" then
+                warn
+                  ''
+                    vim.languages.python.format.type: "black-and-isort" is deprecated,
+                    use `["black" "isort"]` instead.
+                  ''
+                  [
+                    "black"
+                    "isort"
+                  ]
+              else
+                type
+            ) cfg.format.type
+          );
+        in
+        {
+          enable = true;
+          setupOpts = {
+            formatters_by_ft.python = names;
+            default_format_opts.lsp_format = "fallback";
+            formatters = mapListToAttrs (name: {
               inherit name;
               value = formats.${name};
-            })
-            names;
+            }) names;
+          };
         };
-      };
     })
 
     (mkIf cfg.dap.enable {
