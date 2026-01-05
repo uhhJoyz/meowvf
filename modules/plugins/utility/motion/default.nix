@@ -5,5 +5,7 @@ _: {
     ./leap
     ./precognition
     ./clever-f
+    ./portal
+    ./tabout
   ];
 }

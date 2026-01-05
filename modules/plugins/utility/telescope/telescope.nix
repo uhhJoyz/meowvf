@@ -3,9 +3,22 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib.options) mkOption mkEnableOption literalExpression;
-  inherit (lib.types) int str listOf float bool either enum submodule attrsOf anything package;
+  inherit (lib.types)
+    int
+    str
+    listOf
+    float
+    bool
+    either
+    enum
+    submodule
+    attrsOf
+    anything
+    package
+    ;
   inherit (lib.nvim.binds) mkMappingOption;
   inherit (lib.nvim.types) mkPluginSetupOption luaInline;
 
@@ -14,7 +27,10 @@
     pickers.find_files.find_command = mkOption {
       description = "cmd to use for finding files";
       type = either (listOf str) luaInline;
-      default = ["${pkgs.fd}/bin/fd" "--type=file"];
+      default = [
+        "${pkgs.fd}/bin/fd"
+        "--type=file"
+      ];
     };
 
     defaults = {
@@ -40,7 +56,7 @@
 
       pickers.find_command = mkOption {
         type = either (listOf str) luaInline;
-        default = ["${pkgs.fd}/bin/fd"];
+        default = [ "${pkgs.fd}/bin/fd" ];
         description = ''
           Command to use for finding files. If using an executable from {env}`PATH` then you must
           make sure that the package is available in {option}`vim.extraPackages`.
@@ -66,19 +82,31 @@
       };
 
       initial_mode = mkOption {
-        type = enum ["insert" "normal"];
+        type = enum [
+          "insert"
+          "normal"
+        ];
         default = "insert";
         description = "Determines in which mode telescope starts.";
       };
 
       selection_strategy = mkOption {
-        type = enum ["reset" "follow" "row" "closest" "none"];
+        type = enum [
+          "reset"
+          "follow"
+          "row"
+          "closest"
+          "none"
+        ];
         default = "reset";
         description = "Determines how the cursor acts after each sort iteration.";
       };
 
       sorting_strategy = mkOption {
-        type = enum ["descending" "ascending"];
+        type = enum [
+          "descending"
+          "ascending"
+        ];
         default = "ascending";
         description = ''Determines the direction "better" results are sorted towards.'';
       };
@@ -90,12 +118,15 @@
       };
 
       layout_config = mkOption {
-        default = {};
+        default = { };
         type = submodule {
           options = {
             horizontal = {
               prompt_position = mkOption {
-                type = enum ["top" "bottom"];
+                type = enum [
+                  "top"
+                  "bottom"
+                ];
                 default = "top";
                 description = "Where to place prompt window";
               };
@@ -144,21 +175,37 @@
 
       file_ignore_patterns = mkOption {
         type = listOf str;
-        default = ["node_modules" "%.git/" "dist/" "build/" "target/" "result/"];
+        default = [
+          "node_modules"
+          "%.git/"
+          "dist/"
+          "build/"
+          "target/"
+          "result/"
+        ];
         description = "File patterns to omit from Telescope results";
       };
 
       color_devicons = mkEnableOption "colored devicons";
 
       path_display = mkOption {
-        type = listOf (enum ["hidden" "tail" "absolute" "smart" "shorten" "truncate"]);
-        default = ["absolute"];
+        type = listOf (enum [
+          "hidden"
+          "tail"
+          "absolute"
+          "smart"
+          "shorten"
+          "truncate"
+        ]);
+        default = [ "absolute" ];
         description = "Determines how file paths are displayed.";
       };
 
       set_env = mkOption {
         type = attrsOf str;
-        default = {COLORTERM = "truecolor";};
+        default = {
+          COLORTERM = "truecolor";
+        };
         description = "Set an environment for term_previewer";
       };
 
@@ -170,7 +217,7 @@
 
       extensions = mkOption {
         type = attrsOf anything;
-        default = builtins.foldl' (acc: x: acc // (x.setup or {})) {} cfg.extensions;
+        default = builtins.foldl' (acc: x: acc // (x.setup or { })) { } cfg.extensions;
         description = "Attribute set containing per-extension settings for Telescope";
       };
     };
@@ -185,19 +232,24 @@
 
       packages = mkOption {
         type = listOf (either str package);
-        default = [];
+        default = [ ];
         description = "Package or packages providing the Telescope extension to be loaded.";
       };
 
       setup = mkOption {
         type = attrsOf anything;
-        default = {};
-        example = {fzf = {fuzzy = true;};};
+        default = { };
+        example = {
+          fzf = {
+            fuzzy = true;
+          };
+        };
         description = "Named attribute set to be inserted into Telescope's extensions table.";
       };
     };
   };
-in {
+in
+{
   options.vim.telescope = {
     mappings = {
       findProjects = mkMappingOption "Find projects [Telescope]" "<leader>fp";
@@ -231,9 +283,15 @@ in {
 
     setupOpts = mkPluginSetupOption "Telescope" setupOptions;
 
+    theme = mkOption {
+      type = str;
+      default = "";
+      example = literalExpression ''"theme = ivy" sets the theme of every picker to ivy. Options are "", "dropdown", "cursor", and "ivy".'';
+    };
+
     extensions = mkOption {
       type = listOf (submodule extensionOpts);
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [
           {

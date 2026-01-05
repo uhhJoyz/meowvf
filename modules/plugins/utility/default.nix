@@ -4,6 +4,7 @@
     ./ccc
     ./diffview
     ./direnv
+    ./freeze
     ./fzf-lua
     ./gestures
     ./harpoon
@@ -24,10 +25,12 @@
     ./smart-splits
     ./snacks-nvim
     ./surround
+    ./targets-vim
     ./telescope
     ./wakatime
     ./yanky-nvim
     ./yazi-nvim
     ./undotree
+    ./zen-mode
   ];
 }

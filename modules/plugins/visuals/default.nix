@@ -7,6 +7,7 @@ in {
       toggles under individual options.
     '')
 
+    ./bim
     ./cellular-automaton
     ./cinnamon-nvim
     ./fidget-nvim
@@ -17,5 +18,6 @@ in {
     ./nvim-web-devicons
     ./rainbow-delimiters
     ./tiny-devicons-auto-colors
+    ./twilight
   ];
 }
