@@ -10,6 +10,7 @@
     ./harpoon
     ./icon-picker
     ./images
+    ./lean
     ./leetcode-nvim
     ./mkdir
     ./motion

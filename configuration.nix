@@ -197,6 +197,7 @@ isMaximal: {
       icon-picker.enable = isMaximal;
       surround.enable = isMaximal;
       leetcode-nvim.enable = isMaximal;
+      lean.enable = true;
       multicursors.enable = isMaximal;
       smart-splits.enable = isMaximal;
       undotree.enable = isMaximal;

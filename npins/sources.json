@@ -873,6 +873,19 @@
       "url": "https://github.com/folke/lazydev.nvim/archive/258d2a5ef4a3e3d6d9ba9da72c9725c53e9afcbd.tar.gz",
       "hash": "0qn50y6zdw1vad82km1zlkn0g30v1jhr6y56sqg98xlf45kf3yfg"
     },
+    "lean-nvim": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "Julian",
+        "repo": "lean.nvim"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "41c695d6712be65250a27c4df241be31da434e22",
+      "url": "https://github.com/Julian/lean.nvim/archive/41c695d6712be65250a27c4df241be31da434e22.tar.gz",
+      "hash": "sha256-mtGP9ofHn+PJQwUKpiJguhfZWjm+j37Wfuk35m6TJi0="
+    },
     "leap-nvim": {
       "type": "Git",
       "repository": {
