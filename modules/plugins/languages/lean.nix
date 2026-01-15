@@ -7,19 +7,19 @@
   inherit (builtins) attrNames;
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.types) bool enum package;
-  inherit (lib.meta) getExe;
+  inherit (lib.meta) getExe' getExe;
   inherit (lib.modules) mkIf mkMerge;
   inherit (lib.generators) mkLuaInline;
   inherit (lib.nvim.types) mkGrammarOption deprecatedSingleOrListOf;
   inherit (lib.nvim.attrsets) mapListToAttrs;
   inherit (lib.nvim.dag) entryAfter;
 
-  cfg = config.vim.languages.clang;
+  cfg = config.vim.languages.lean;
 
   defaultServers = ["lean-nvim"];
   servers = {
-    clangd = {
-      cmd = ["${pkgs.clang-tools}/bin/clangd"];
+    lean-nvim = {
+      cmd = [(getExe' pkgs.lean4 "lean4")];
       filetypes = ["lean"];
       root_markers = [
         "README.md"
@@ -58,7 +58,7 @@
             local bufnr = vim.api.nvim_get_current_buf()
             local lean_client = vim.lsp.get_clients({ bufnr = bufnr, name = "lean.nvim" })[1]
             if not lean_client or not lean_client.supports_method 'textDocument/symbolInfo' then
-              return vim.notify('Clangd client not found', vim.log.levels.ERROR)
+              return vim.notify('Lean client not found', vim.log.levels.ERROR)
             end
             local win = vim.api.nvim_get_current_win()
             local params = vim.lsp.util.make_position_params(win, lean_client.offset_encoding)
@@ -79,101 +79,25 @@
               })
             end, bufnr)
           end
-
-          vim.api.nvim_buf_create_user_command(
-            bufnr,
-            "ClangdSwitchSourceHeader",
-            function(arg)
-              switch_source_header(0)
-            end,
-            {desc = "Switch between source/header"}
-          )
-
-          vim.api.nvim_buf_create_user_command(
-            bufnr,
-            "ClangdShowSymbolInfo",
-            function(arg)
-              symbol_info()
-            end,
-            {desc = "Show symbol info"}
-          )
         end
       '';
     };
   };
-
-  defaultDebugger = "lldb-vscode";
-  debuggers = {
-    lldb-vscode = {
-      package = pkgs.lldb;
-      dapConfig = ''
-        dap.adapters.lldb = {
-          type = 'executable',
-          command = '${cfg.dap.package}/bin/lldb-dap',
-          name = 'lldb'
-        }
-        dap.configurations.cpp = {
-          {
-            name = 'Launch',
-            type = 'lldb',
-            request = 'launch',
-            program = function()
-              return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-            end,
-            cwd = "''${workspaceFolder}",
-            stopOnEntry = false,
-            args = {},
-          },
-        }
-
-        dap.configurations.c = dap.configurations.cpp
-      '';
-    };
-  };
 in {
-  options.vim.languages.clang = {
-    enable = mkEnableOption "C/C++ language support";
-
-    cHeader = mkOption {
-      description = ''
-        C syntax for headers. Can fix treesitter errors, see:
-        https://www.reddit.com/r/neovim/comments/orfpcd/question_does_the_c_parser_from_nvimtreesitter/
-      '';
-      type = bool;
-      default = false;
-    };
+  options.vim.languages.lean = {
+    enable = mkEnableOption "Lean language support";
 
     treesitter = {
-      enable = mkEnableOption "C/C++ treesitter" // {default = config.vim.languages.enableTreesitter;};
-      cPackage = mkGrammarOption pkgs "c";
-      cppPackage = mkGrammarOption pkgs "cpp";
+      enable = mkEnableOption "Lean treesitter" // {default = config.vim.languages.enableTreesitter;};
     };
 
     lsp = {
-      enable = mkEnableOption "clang LSP support" // {default = config.vim.lsp.enable;};
+      enable = mkEnableOption "Lean LSP support" // {default = config.vim.lsp.enable;};
 
       servers = mkOption {
-        description = "The clang LSP server to use";
-        type = deprecatedSingleOrListOf "vim.language.clang.lsp.servers" (enum (attrNames servers));
+        description = "The Lean LSP server to use";
+        type = deprecatedSingleOrListOf "vim.language.lean.lsp.servers" (enum (attrNames servers));
         default = defaultServers;
-      };
-    };
-
-    dap = {
-      enable = mkOption {
-        description = "Enable clang Debug Adapter";
-        type = bool;
-        default = config.vim.languages.enableDAP;
-      };
-      debugger = mkOption {
-        description = "clang debugger to use";
-        type = enum (attrNames debuggers);
-        default = defaultDebugger;
-      };
-      package = mkOption {
-        description = "clang debugger package.";
-        type = package;
-        default = debuggers.${cfg.dap.debugger}.package;
       };
     };
   };
@@ -195,11 +119,6 @@ in {
           value = servers.${name};
         })
         cfg.lsp.servers;
-    })
-
-    (mkIf cfg.dap.enable {
-      vim.debugger.nvim-dap.enable = true;
-      vim.debugger.nvim-dap.sources.clang-debugger = debuggers.${cfg.dap.debugger}.dapConfig;
     })
   ]);
 }
