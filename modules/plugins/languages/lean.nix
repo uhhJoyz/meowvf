@@ -103,10 +103,6 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
-    (mkIf cfg.cHeader {
-      vim.pluginRC.c-header = entryAfter ["basic"] "vim.g.c_syntax_for_h = 1";
-    })
-
     (mkIf cfg.treesitter.enable {
       vim.treesitter.enable = true;
       vim.treesitter.grammars = [cfg.treesitter.cPackage cfg.treesitter.cppPackage];
